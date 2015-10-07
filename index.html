@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Testes Angular</title>
+		<script type="text/javascript" src="scripts/angular.min.js"></script>
+		<script type="text/javascript" src="scripts/angular-messages.min.js"></script>
+		<script type="text/javascript" src="scripts/app.js"></script>
+	</head>
+	<body ng-app="Agenda">
+		<div ng-controller="mainCtrl">
+			<table ng-show="contatos.length > 0">
+				<tr>
+					<th>Nome</th><th>Estado</th><th>Telefone</th><th>Email</th>
+				</tr>
+				<tr ng-repeat="contato in contatos | orderBy:'nome'">
+					<td>{{contato.nome}}</td><td>{{contato.estado}}</td><td>{{contato.telefone}}</td><td>{{contato.email}}</td>
+				</tr>
+			</table>
+			<form name="contatoForm">
+				<select name="estado" ng-model="contato.estado" ng-required='true' ng-options="estado.sigla as estado.nome group by estado.regiao for estado in estados">
+					<option value>Selecione um estado</option>
+				</select><br />
+				<input type="text" name='nome' placeholder="Nome" ng-model="contato.nome" ng-required="true" ng-minlength="10" ng-maxlength="150" /><br />
+				<input type="text" name='telefone' placeholder="Telefone" ng-model="contato.telefone" ng-required="true" ng-pattern="/^[0-9]{4,5}-[0-9]{4}$/" /><br />
+				<input type="text" name='email' placeholder="Email" ng-model="contato.email" ng-required="true" ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i" /><br />
+				<button ng-click="adicionarContato()">Adicionar contato</button>
+			</form>
+			<div class="Erros">
+				<!-- Estado -->
+				<div ng-if="contatoForm.estado.$invalid && contatoForm.estado.$dirty" ng-messages='contatoForm.estado.$error'>
+					<h4 ng-message="required">Deve ser selecionado um estado</h4>
+				</div>
+				<!-- Nome -->
+				<div ng-if="contatoForm.nome.$invalid && contatoForm.nome.$dirty" ng-messages='contatoForm.nome.$error'>
+					<h4 ng-message="required">o campo Nome deve ser preenchido</h4>
+					<h4 ng-message="minlength">o campo Nome deve ter ao menos 10 caracteres</h4>
+					<h4 ng-message="maxlength">o campo Nome deve ter até 150 caracteres</h4>
+				</div>
+				<!-- Telefone -->
+				<div ng-if="contatoForm.telefone.$invalid && contatoForm.telefone.$dirty" ng-messages='contatoForm.telefone.$error'>
+					<h4 ng-message="required">o campo Telefone deve ser preenchido</h4>
+					<h4 ng-message="pattern">o campo Telefone deve ter o padrão DDDD-DDDD ou DDDDD-DDDD</h4>
+				</div>
+				<!-- Email -->
+				<div ng-if="contatoForm.email.$invalid && contatoForm.email.$dirty" ng-messages='contatoForm.email.$error'>
+					<h4 ng-message="required">o campo Email deve ser preenchido</h4>
+					<h4 ng-message="pattern">informe um Email válido</h4>
+				</div>		
+			</div>
+		</div>
+	</body>
+</html>
